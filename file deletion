@@ -1,0 +1,41 @@
+import os
+import sys
+from colorama import Fore, Back, Style
+
+file_path = 'D:\\Downloads\\'
+bytes_to_kb = 0.0009765625
+
+dir_list = os.listdir(file_path)
+file_over_1GB = []
+file_size_print = 0
+for file in dir_list:
+    full_path = os.path.join(file_path,
+                             file)  # musí se dát join, jinak by os.path.exists hledalo v current directory a ne v cilove directory
+    file_size = round((os.path.getsize(full_path) * bytes_to_kb))
+    if file_size > 1000000:
+        # 1000000 kb = 1 GB
+        file_size_print += file_size
+        file_over_1GB.append(file)
+
+for file in file_over_1GB:
+    print(file)
+
+while True:
+    print(Fore.GREEN, f"Files with size over 1 GB")
+    delete_files = input("\nWould you like to delete some files? y/n ")
+    if delete_files == "y".lower():
+        try:
+            for file in file_over_1GB:
+                full_path = os.path.join(file_path, file)
+                delete_files = input(f"{file} y/n (to end press exit) ")
+                if delete_files == "y".lower():
+                    os.remove(full_path)
+                    print(Fore.GREEN, f"{file} DELETED")
+                    print(Style.RESET_ALL)
+                elif delete_files == "exit".lower():
+                    break
+        except FileNotFoundError:
+            print(f"\nFile wasn't found", file=sys.stderr)
+    elif delete_files == "n".lower():
+        print("ending")
+        break
