@@ -1,2 +1,2 @@
 # File-deletion
-deletion of files in target folder
+deletion of files in target folder in Python
